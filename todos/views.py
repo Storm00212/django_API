@@ -6,29 +6,30 @@ class TaskViewSet(viewsets.ModelViewSet):
     """
     ViewSet for handling CRUD operations on Task model.
     
-    This ViewSet automatically provides the following actions:
-    - list(): GET /api/tasks/ - Returns a list of all tasks
-    - create(): POST /api/tasks/ - Creates a new task
-    - retrieve(): GET /api/tasks/{id}/ - Returns a single task
-    - update(): PUT /api/tasks/{id}/ - Updates a task (full update)
-    - partial_update(): PATCH /api/tasks/{id}/ - Partially updates a task
-    - destroy(): DELETE /api/tasks/{id}/ - Deletes a task
+    WHY THIS MATTERS:
+    - Combines all standard CRUD operations (list, create, retrieve, update, destroy) in a single class
+    - Reduces code duplication compared to writing separate views for each operation
+    - Automatically maps HTTP methods to appropriate actions based on REST conventions
+    - Provides consistent API behavior and URL patterns
+    - Leverages Django REST Framework's built-in functionality for common patterns
     
-    The ModelViewSet combines the logic of:
-    - ListModelMixin (for list action)
-    - CreateModelMixin (for create action)
-    - RetrieveModelMixin (for retrieve action)
-    - UpdateModelMixin (for update action)
-    - DestroyModelMixin (for destroy action)
-    - GenericViewSet (base class that provides the viewset behavior)
-    
-    Attributes:
-        queryset: The set of Task objects to operate on (all tasks by default)
-        serializer_class: The serializer class to use for data validation and conversion
+    The ViewSet pattern is important because it:
+    1. Follows DRY (Don't Repeat Yourself) principles
+    2. Ensures consistent implementation of RESTful endpoints
+    3. Simplifies URL routing configuration
+    4. Makes it easier to maintain and extend the API
     """
     # QuerySet that defines which objects will be available in the API
-    # Task.objects.all() returns all Task objects from the database
+    # WHY THIS MATTERS:
+    # - Determines what data can be accessed through this ViewSet
+    # - Task.objects.all() returns all Task objects from the database
+    # - Could be filtered to show only user-specific tasks in a multi-user system
     queryset = Task.objects.all()
     
     # Serializer class responsible for converting Task instances to/from JSON
+    # WHY THIS MATTERS:
+    # - Handles data serialization (model → JSON) for API responses
+    # - Handles data deserialization (JSON → model) for API requests
+    # - Performs validation on incoming data before saving to database
+    # - Controls which fields are exposed in the API (defined in TaskSerializer)
     serializer_class = TaskSerializer
