@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR points to the root directory of the Django project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -20,80 +22,95 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-import os
-from pathlib import Path
-
+# SECRET_KEY is used for cryptographic signing and should be kept secret
+# In production, this should be set via environment variable
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-b5tk4y6kzrmb=6oh%)w#2d+kkidre*3_+p0q_uqa@(tz2z-2=*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG enables debug mode which shows detailed error pages
+# Should be False in production to prevent leaking sensitive information
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
+# ALLOWED_HOSTS is a list of strings representing the host/domain names
+# that this Django site can serve. This is a security measure to prevent
+# HTTP Host header attacks
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split()
 
 
 # Application definition
-
+# INSTALLED_APPS lists all Django applications that are enabled in this project
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'todos',
+    # Default Django applications
+    'django.contrib.admin',          # Django admin interface
+    'django.contrib.auth',           # Authentication framework
+    'django.contrib.contenttypes',   # Content type system
+    'django.contrib.sessions',       # Session framework
+    'django.contrib.messages',       # Messaging framework
+    'django.contrib.staticfiles',    # Static files management
+    
+    # Third-party applications
+    'rest_framework',                # Django REST Framework for building APIs
+    
+    # Local applications
+    'todos',                         # Our todos application
 ]
 
+
+# MIDDLEWARE is a list of middleware classes to use in order
+# Middleware processes requests/responses globally before they reach views
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',           # Security enhancements
+    'django.contrib.sessions.middleware.SessionMiddleware',    # Session management
+    'django.middleware.common.CommonMiddleware',               # Common request handling
+    'django.middleware.csrf.CsrfViewMiddleware',              # CSRF protection
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # Authentication
+    'django.contrib.messages.middleware.MessageMiddleware',   # Message handling
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', # Clickjacking protection
 ]
 
+# ROOT_URLCONF tells Django where to find the URL configuration
 ROOT_URLCONF = 'task_manager.urls'
 
+# TEMPLATES configuration for Django's template engine
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [],  # Additional directories to look for templates
+        'APP_DIRS': True,  # Look for templates inside each installed app
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',  # Makes request available in templates
+                'django.contrib.auth.context_processors.auth', # Makes user available in templates
+                'django.contrib.messages.context_processors.messages', # Makes messages available in templates
             ],
         },
     },
 ]
 
+# WSGI_APPLICATION tells Django which WSGI application to use
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 
-# Database
+# Database configuration
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-import os
-from pathlib import Path
+# Using PostgreSQL as our database backend for production readiness
+# All sensitive credentials are retrieved from environment variables for security
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'task_manager_db'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL database adapter
+        'NAME': os.environ.get('DB_NAME', 'task_manager_db'),  # Database name
+        'USER': os.environ.get('DB_USER', 'postgres'),        # Database user
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'), # Database password
+        'HOST': os.environ.get('DB_HOST', 'localhost'),       # Database host
+        'PORT': os.environ.get('DB_PORT', '5432'),            # Database port
     }
 }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+# Validators that are used to check if passwords are strong enough
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -114,16 +131,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
+LANGUAGE_CODE = 'en-us'  # Language code for this installation
+TIME_ZONE = 'UTC'        # Time zone for this installation
+USE_I18N = True          # Enable internationalization
+USE_TZ = True            # Enable timezone support
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'static/'  # URL to use when referring to static files
